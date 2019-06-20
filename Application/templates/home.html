@@ -3,6 +3,7 @@
 <head>
 <title> Home Page </title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <form class="container" action="{% url 'list_students' %}" method="POST">
@@ -33,13 +34,38 @@
     </div>
 </div>
 <div class="row">
-    <div class="offset-md-11">
+    <div class="form-group offset-md-11">
         <input class="btn btn-primary" type="submit" value="Add data">
-    <div>
+    </div>
 </div>
 </form>
+<div class="container">
+    <button class="btn btn-primary" id="register" value = 1>Register <i class="fa fa-check"></i></button>
+</div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script>
+$(document).ready(function(){
+
+    $("#register").on('click', function(){
+        var currentObject = $(this);
+        if(currentObject.val() == 1)
+        {
+            currentObject.html("Unregister <i class='fa fa-times'></i>");
+            currentObject.prop('value', 0);
+            currentObject.removeClass("btn-primary");
+            currentObject.addClass("btn-danger");
+        }
+        else
+        {
+            currentObject.html("Register <i class='fa fa-check'></i>");
+            currentObject.prop('value', 1);
+            currentObject.removeClass("btn-danger");
+            currentObject.addClass("btn-primary");
+        }
+    });
+});
+</script>
 </body>
 </html>
