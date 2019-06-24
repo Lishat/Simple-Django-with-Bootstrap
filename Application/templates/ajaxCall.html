@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <title>Ajax Call</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <select class="form-control" id="school" name="school">
+            <option value="">Select a School</option>
+            {% for i in Schools %}
+                <option value="{{i.id}}">{{i.school_name}}</option>
+            {% endfor %}
+        </select>
+        <table id="table" class="table">
+            <tr><th>Name</th><th>Classroom</th></tr>
+        </table>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script>
+        $(document).ready(function(){
+            $("#school").on('change', function(){
+                var schoolId = $(this).val();
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'ajax_data' %}",
+                    data: {schoolId:schoolId, csrfmiddlewaretoken:'{{csrf_token}}'},
+                    dataType: 'text',
+                    success:function(data){
+                        var text = "<tr><th>Name</th><th>Classroom</th></tr>";
+                        var values = JSON.parse(data);
+                        for(var i = 0; i < Object.keys(values).length; i++)
+                        {
+                            text += "<tr><td>"+values[i]["Name"]+"</td><td>"+values[i]["Classroom"]+"</td></tr>";
+                        }
+                        $("#table").html(text);
+                    },
+                    error: function (jqXHR, exception) {
+                        var msg = '';
+                        if (jqXHR.status === 0) {
+                            msg = 'Not connect.\n Verify Network.';
+                        } else if (jqXHR.status == 404) {
+                            msg = 'Requested page not found. [404]';
+                        } else if (jqXHR.status == 500) {
+                            msg = 'Internal Server Error [500].';
+                        } else if (exception === 'parsererror') {
+                            msg = 'Requested JSON parse failed.';
+                        } else if (exception === 'timeout') {
+                            msg = 'Time out error.';
+                        } else if (exception === 'abort') {
+                            msg = 'Ajax request aborted.';
+                        } else {
+                            msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                        }
+                        console.log(msg);
+                    },
+                });
+            });
+        });
+/**/
+        </script>
+    </body>
+</html>
